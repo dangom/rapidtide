@@ -7,4 +7,4 @@ Common rapidtide workflows.
 from .rapidtide2 import rapidtide_workflow
 from .showxcorrx import showxcorrx_workflow
 
-__all__ = ['rapidtide_workflow', 'showxcorrx_workflow']
+__all__ = ["rapidtide_workflow", "showxcorrx_workflow"]

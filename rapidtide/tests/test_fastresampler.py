@@ -12,7 +12,7 @@ def test_fastresampler(debug=False):
     testlen = 1000
     shiftdist = 30
     timeaxis = np.arange(0.0, 1.0 * testlen) * tr
-    #timecoursein = np.zeros((testlen), dtype='float64')
+    # timecoursein = np.zeros((testlen), dtype='float64')
     timecoursein = np.float64(timeaxis * 0.0)
     midpoint = int(testlen // 2) + 1
     timecoursein[midpoint - 1] = np.float64(1.0)
@@ -30,7 +30,7 @@ def test_fastresampler(debug=False):
         plt.ylim([-1.0, 2.0 * len(shiftlist) + 1.0])
         plt.hold(True)
         plt.plot(timecoursein)
-        legend = ['Original']
+        legend = ["Original"]
         offset = 0.0
 
     for shiftdist in shiftlist:
@@ -48,10 +48,10 @@ def test_fastresampler(debug=False):
         if debug:
             offset += 1.0
             plt.plot(tcrolled + offset)
-            legend.append('Roll ' + str(shiftdist))
+            legend.append("Roll " + str(shiftdist))
             offset += 1.0
             plt.plot(tcshifted + offset)
-            legend.append('Fastresampler ' + str(shiftdist))
+            legend.append("Fastresampler " + str(shiftdist))
 
         # do the tests
         msethresh = 1e-6
@@ -68,5 +68,5 @@ def main():
     test_fastresampler(debug=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

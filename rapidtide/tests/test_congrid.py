@@ -6,7 +6,8 @@ import scipy as sp
 
 from rapidtide.resample import congrid
 from rapidtide.filter import dolpfiltfilt
-#from rapidtide.tests.utils import
+
+# from rapidtide.tests.utils import
 
 import matplotlib.pyplot as plt
 
@@ -16,6 +17,7 @@ def funcvalue(x, midpoint=500.0, width=25.0):
         return 0.5
     else:
         return -0.5
+
 
 def funcvalue2(x, frequency=0.01, phase=0.0, amplitude=1.5):
     return amplitude * np.sin(2.0 * np.pi * frequency * x + phase)
@@ -27,53 +29,50 @@ def test_congrid(debug=False):
     sourcelen = 1000
     sourceaxis = sp.linspace(0.0, tr * sourcelen, num=sourcelen, endpoint=False)
     if debug:
-        print('sourceaxis range:', sourceaxis[0], sourceaxis[-1])
+        print("sourceaxis range:", sourceaxis[0], sourceaxis[-1])
 
     timecoursein = np.float64(sourceaxis * 0.0)
     for i in range(len(sourceaxis)):
         timecoursein[i] = funcvalue2(sourceaxis[i])
 
-    '''
+    """
     timecoursein = np.float64(sourceaxis * 0.0)
     midpoint = int(sourcelen // 2) + 1
     timecoursein[midpoint - 20:midpoint + 20] = np.float64(1.0)
     timecoursein -= 0.5
-    '''
+    """
 
     # now make the destination
     gridlen = 150
     gridaxis = sp.linspace(0.0, tr * sourcelen, num=gridlen, endpoint=False)
     if debug:
-        print('gridaxis range:', gridaxis[0], gridaxis[-1])
+        print("gridaxis range:", gridaxis[0], gridaxis[-1])
     weights = np.zeros((gridlen), dtype=float)
     griddeddata = np.zeros((gridlen), dtype=float)
 
     # define the gridding
     congridbins = 1.5
-    gridkernel = 'gauss'
+    gridkernel = "gauss"
 
-    #butterorder = 4
-    #timecoursein = 0.5 * dolpfiltfilt(1.0, 0.25, timecoursein, butterorder) + 0.5
+    # butterorder = 4
+    # timecoursein = 0.5 * dolpfiltfilt(1.0, 0.25, timecoursein, butterorder) + 0.5
 
-    print('about to grid')
+    print("about to grid")
 
     numsamples = 5000
     for i in range(numsamples):
         t = np.random.uniform() * tr * sourcelen
-        thevals, theweights, theindices = congrid(gridaxis,
-                                                    t,
-                                                    funcvalue2(t),
-                                                    congridbins,
-                                                    kernel=gridkernel,
-                                                    debug=True)
+        thevals, theweights, theindices = congrid(
+            gridaxis, t, funcvalue2(t), congridbins, kernel=gridkernel, debug=True
+        )
         for i in range(len(theindices)):
             weights[theindices[i]] += theweights[i]
             griddeddata[theindices[i]] += thevals[i]
 
     griddeddata = np.where(weights > 0.0, griddeddata / weights, 0.0)
 
-    print('gridding done')
-    print('debug:', debug)
+    print("gridding done")
+    print("debug:", debug)
 
     # plot if we are doing that
     if debug:
@@ -81,18 +80,18 @@ def test_congrid(debug=False):
         legend = []
         offset += 1.0
         plt.plot(sourceaxis, timecoursein)
-        legend.append('Original')
+        legend.append("Original")
         offset += 1.0
         plt.plot(gridaxis, griddeddata)
-        legend.append('Gridded')
+        legend.append("Gridded")
         plt.plot(gridaxis, weights)
-        legend.append('Weights')
+        legend.append("Weights")
 
     # do the tests
-    #msethresh = 1e-6
-    #aethresh = 2
-    #assert mse(tcrolled, tcshifted) < msethresh
-    #np.testing.assert_almost_equal(tcrolled, tcshifted, aethresh)
+    # msethresh = 1e-6
+    # aethresh = 2
+    # assert mse(tcrolled, tcshifted) < msethresh
+    # np.testing.assert_almost_equal(tcrolled, tcshifted, aethresh)
 
     if debug:
         plt.legend(legend)
@@ -103,5 +102,5 @@ def main():
     test_congrid(debug=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

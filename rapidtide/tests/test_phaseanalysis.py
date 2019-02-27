@@ -40,14 +40,14 @@ import matplotlib.pyplot as plt
 
 def eval_phaseanalysis(rootname=None, display=False):
     # read in some data
-    testwaveform = tide_io.readvec(rootname + '.txt')
+    testwaveform = tide_io.readvec(rootname + ".txt")
 
     # now calculate the phase waveform
     instantaneous_phase, amplitude_envelope = tide_fit.phaseanalysis(testwaveform)
-    tide_io.writevec(amplitude_envelope, rootname + '_ampenv.txt')
-    tide_io.writevec(instantaneous_phase, rootname + '_instphase_unwrapped.txt')
+    tide_io.writevec(amplitude_envelope, rootname + "_ampenv.txt")
+    tide_io.writevec(instantaneous_phase, rootname + "_instphase_unwrapped.txt")
     filtered_phase = tide_math.trendfilt(instantaneous_phase, order=3, ndevs=2.0)
-    tide_io.writevec(filtered_phase, rootname + '_filtered_instphase_unwrapped.txt')
+    tide_io.writevec(filtered_phase, rootname + "_filtered_instphase_unwrapped.txt")
     initialphase = instantaneous_phase[0]
 
     if display:
@@ -60,11 +60,12 @@ def eval_phaseanalysis(rootname=None, display=False):
 
 
 def test_phaseanalysis(display=False):
-    eval_phaseanalysis(rootname='rapidtide/tests/phasetest', display=display)
+    eval_phaseanalysis(rootname="rapidtide/tests/phasetest", display=display)
+
 
 def main():
     test_phaseanalysis(display=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -95,8 +95,17 @@ def disablenumba():
 
 
 # --------------------------- Correlation functions -------------------------------------------------
-def autocorrcheck(corrscale, thexcorr, delta=0.1, acampthresh=0.1, aclagthresh=10.0, displayplots=False, prewindow=True,
-                  detrendorder=1, debug=False):
+def autocorrcheck(
+    corrscale,
+    thexcorr,
+    delta=0.1,
+    acampthresh=0.1,
+    aclagthresh=10.0,
+    displayplots=False,
+    prewindow=True,
+    detrendorder=1,
+    debug=False,
+):
     """
 
     Parameters
@@ -116,9 +125,11 @@ def autocorrcheck(corrscale, thexcorr, delta=0.1, acampthresh=0.1, aclagthresh=1
 
     """
     lookahead = 2
-    peaks = tide_fit.peakdetect(thexcorr, x_axis=corrscale, delta=delta, lookahead=lookahead)
-    maxpeaks = np.asarray(peaks[0], dtype='float64')
-    minpeaks = np.asarray(peaks[1], dtype='float64')
+    peaks = tide_fit.peakdetect(
+        thexcorr, x_axis=corrscale, delta=delta, lookahead=lookahead
+    )
+    maxpeaks = np.asarray(peaks[0], dtype="float64")
+    minpeaks = np.asarray(peaks[1], dtype="float64")
     if len(peaks[0]) > 0:
         if debug:
             print(peaks)
@@ -132,26 +143,40 @@ def autocorrcheck(corrscale, thexcorr, delta=0.1, acampthresh=0.1, aclagthresh=1
                 sidelobeamp = thexcorr[sidelobeindex]
                 numbins = 1
                 while (sidelobeindex + numbins < np.shape(corrscale)[0] - 1) and (
-                        thexcorr[sidelobeindex + numbins] > sidelobeamp / 2.0):
+                    thexcorr[sidelobeindex + numbins] > sidelobeamp / 2.0
+                ):
                     numbins += 1
-                sidelobewidth = (corrscale[sidelobeindex + numbins] - corrscale[sidelobeindex]) * 2.0
+                sidelobewidth = (
+                    corrscale[sidelobeindex + numbins] - corrscale[sidelobeindex]
+                ) * 2.0
                 fitstart = sidelobeindex - numbins
                 fitend = sidelobeindex + numbins
-                sidelobeamp, sidelobetime, sidelobewidth = tide_fit.gaussfit(sidelobeamp, sidelobetime, sidelobewidth,
-                                                                             corrscale[fitstart:fitend + 1],
-                                                                             thexcorr[fitstart:fitend + 1])
+                sidelobeamp, sidelobetime, sidelobewidth = tide_fit.gaussfit(
+                    sidelobeamp,
+                    sidelobetime,
+                    sidelobewidth,
+                    corrscale[fitstart : fitend + 1],
+                    thexcorr[fitstart : fitend + 1],
+                )
 
                 if displayplots:
-                    pl.plot(corrscale[fitstart:fitend + 1], thexcorr[fitstart:fitend + 1], 'k',
-                            corrscale[fitstart:fitend + 1],
-                            tide_fit.gauss_eval(corrscale[fitstart:fitend + 1], [sidelobeamp, sidelobetime, sidelobewidth]),
-                            'r')
+                    pl.plot(
+                        corrscale[fitstart : fitend + 1],
+                        thexcorr[fitstart : fitend + 1],
+                        "k",
+                        corrscale[fitstart : fitend + 1],
+                        tide_fit.gauss_eval(
+                            corrscale[fitstart : fitend + 1],
+                            [sidelobeamp, sidelobetime, sidelobewidth],
+                        ),
+                        "r",
+                    )
                     pl.show()
                 return sidelobetime, sidelobeamp
     return None, None
 
 
-def quickcorr(data1, data2, windowfunc='hamming'):
+def quickcorr(data1, data2, windowfunc="hamming"):
     """
 
     Parameters
@@ -164,19 +189,27 @@ def quickcorr(data1, data2, windowfunc='hamming'):
     -------
 
     """
-    thepcorr = sp.stats.stats.pearsonr(tide_math.corrnormalize(data1,
-                                                               prewindow=True,
-                                                               detrendorder=1,
-                                                               windowfunc=windowfunc),
-                                       tide_math.corrnormalize(data2,
-                                                               prewindow=True,
-                                                               detrendorder=1,
-                                                               windowfunc=windowfunc))
+    thepcorr = sp.stats.stats.pearsonr(
+        tide_math.corrnormalize(
+            data1, prewindow=True, detrendorder=1, windowfunc=windowfunc
+        ),
+        tide_math.corrnormalize(
+            data2, prewindow=True, detrendorder=1, windowfunc=windowfunc
+        ),
+    )
     return thepcorr
 
 
-def shorttermcorr_1D(data1, data2, sampletime, windowtime, samplestep=1, prewindow=False, detrendorder=0,
-                     windowfunc='hamming'):
+def shorttermcorr_1D(
+    data1,
+    data2,
+    sampletime,
+    windowtime,
+    samplestep=1,
+    prewindow=False,
+    detrendorder=0,
+    windowfunc="hamming",
+):
     """
 
     Parameters
@@ -200,24 +233,42 @@ def shorttermcorr_1D(data1, data2, sampletime, windowtime, samplestep=1, prewind
     corrpertime = []
     ppertime = []
     for i in range(halfwindow, np.shape(data1)[0] - halfwindow, samplestep):
-        dataseg1 = tide_math.corrnormalize(data1[i - halfwindow:i + halfwindow],
-                                           prewindow=prewindow,
-                                           detrendorder=detrendorder,
-                                           windowfunc=windowfunc)
-        dataseg2 = tide_math.corrnormalize(data2[i - halfwindow:i + halfwindow],
-                                           prewindow=prewindow,
-                                           detrendorder=detrendorder,
-                                           windowfunc=windowfunc)
+        dataseg1 = tide_math.corrnormalize(
+            data1[i - halfwindow : i + halfwindow],
+            prewindow=prewindow,
+            detrendorder=detrendorder,
+            windowfunc=windowfunc,
+        )
+        dataseg2 = tide_math.corrnormalize(
+            data2[i - halfwindow : i + halfwindow],
+            prewindow=prewindow,
+            detrendorder=detrendorder,
+            windowfunc=windowfunc,
+        )
         thepcorr = sp.stats.stats.pearsonr(dataseg1, dataseg2)
         times.append(i * sampletime)
         corrpertime.append(thepcorr[0])
         ppertime.append(thepcorr[1])
-    return np.asarray(times, dtype='float64'), np.asarray(corrpertime, dtype='float64'), np.asarray(ppertime,
-                                                                                                    dtype='float64')
+    return (
+        np.asarray(times, dtype="float64"),
+        np.asarray(corrpertime, dtype="float64"),
+        np.asarray(ppertime, dtype="float64"),
+    )
 
 
-def shorttermcorr_2D(data1, data2, sampletime, windowtime, samplestep=1, laglimit=None, weighting='none',
-                     prewindow=False, windowfunc='hamming', detrendorder=0, display=False):
+def shorttermcorr_2D(
+    data1,
+    data2,
+    sampletime,
+    windowtime,
+    samplestep=1,
+    laglimit=None,
+    weighting="none",
+    prewindow=False,
+    windowfunc="hamming",
+    detrendorder=0,
+    display=False,
+):
     """
 
     Parameters
@@ -244,11 +295,25 @@ def shorttermcorr_2D(data1, data2, sampletime, windowtime, samplestep=1, laglimi
     if laglimit is None:
         laglimit = windowtime / 2.0
 
-    dataseg1 = tide_math.corrnormalize(data1[0:2 * halfwindow], prewindow=prewindow, detrendorder=detrendorder, windowfunc=windowfunc)
-    dataseg2 = tide_math.corrnormalize(data2[0:2 * halfwindow], prewindow=prewindow, detrendorder=detrendorder, windowfunc=windowfunc)
+    dataseg1 = tide_math.corrnormalize(
+        data1[0 : 2 * halfwindow],
+        prewindow=prewindow,
+        detrendorder=detrendorder,
+        windowfunc=windowfunc,
+    )
+    dataseg2 = tide_math.corrnormalize(
+        data2[0 : 2 * halfwindow],
+        prewindow=prewindow,
+        detrendorder=detrendorder,
+        windowfunc=windowfunc,
+    )
     thexcorr = fastcorrelate(dataseg1, dataseg2, weighting=weighting)
     xcorrlen = np.shape(thexcorr)[0]
-    xcorr_x = np.arange(0.0, xcorrlen) * sampletime - (xcorrlen * sampletime) / 2.0 + sampletime / 2.0
+    xcorr_x = (
+        np.arange(0.0, xcorrlen) * sampletime
+        - (xcorrlen * sampletime) / 2.0
+        + sampletime / 2.0
+    )
     corrzero = int(xcorrlen // 2)
     xcorrpertime = []
     times = []
@@ -256,22 +321,31 @@ def shorttermcorr_2D(data1, data2, sampletime, windowtime, samplestep=1, laglimi
     delayvals = []
     valid = []
     for i in range(halfwindow, np.shape(data1)[0] - halfwindow, samplestep):
-        dataseg1 = tide_math.corrnormalize(data1[i - halfwindow:i + halfwindow],
-                                           prewindow=prewindow,
-                                           detrendorder=detrendorder,
-                                           windowfunc=windowfunc)
-        dataseg2 = tide_math.corrnormalize(data2[i - halfwindow:i + halfwindow],
-                                           prewindow=prewindow,
-                                           detrendorder=detrendorder,
-                                           windowfunc=windowfunc)
+        dataseg1 = tide_math.corrnormalize(
+            data1[i - halfwindow : i + halfwindow],
+            prewindow=prewindow,
+            detrendorder=detrendorder,
+            windowfunc=windowfunc,
+        )
+        dataseg2 = tide_math.corrnormalize(
+            data2[i - halfwindow : i + halfwindow],
+            prewindow=prewindow,
+            detrendorder=detrendorder,
+            windowfunc=windowfunc,
+        )
         times.append(i * sampletime)
         xcorrpertime.append(fastcorrelate(dataseg1, dataseg2, weighting=weighting))
         maxindex, thedelayval, theRval, maxsigma, maskval, failreason, peakstart, peakend = tide_fit.findmaxlag_gauss(
-            xcorr_x, xcorrpertime[-1], -laglimit, laglimit, 1000.0,
+            xcorr_x,
+            xcorrpertime[-1],
+            -laglimit,
+            laglimit,
+            1000.0,
             refine=True,
             useguess=False,
             fastgauss=False,
-            displayplots=False)
+            displayplots=False,
+        )
         delayvals.append(thedelayval)
         Rvals.append(theRval)
         if failreason == 0:
@@ -280,11 +354,13 @@ def shorttermcorr_2D(data1, data2, sampletime, windowtime, samplestep=1, laglimi
             valid.append(0)
     if display:
         pl.imshow(xcorrpertime)
-    return np.asarray(times, dtype='float64'), \
-           np.asarray(xcorrpertime, dtype='float64'), \
-           np.asarray(Rvals, dtype='float64'), \
-           np.asarray(delayvals, dtype='float64'), \
-           np.asarray(valid, dtype='float64')
+    return (
+        np.asarray(times, dtype="float64"),
+        np.asarray(xcorrpertime, dtype="float64"),
+        np.asarray(Rvals, dtype="float64"),
+        np.asarray(delayvals, dtype="float64"),
+        np.asarray(valid, dtype="float64"),
+    )
 
 
 def delayedcorr(data1, data2, delayval, timestep):
@@ -301,7 +377,9 @@ def delayedcorr(data1, data2, delayval, timestep):
     -------
 
     """
-    return sp.stats.stats.pearsonr(data1, tide_resample.timeshift(data2, delayval / timestep, 30)[0])
+    return sp.stats.stats.pearsonr(
+        data1, tide_resample.timeshift(data2, delayval / timestep, 30)[0]
+    )
 
 
 def cepstraldelay(data1, data2, timestep, displayplots=True):
@@ -330,34 +408,34 @@ def cepstraldelay(data1, data2, timestep, displayplots=True):
         tvec = timestep * np.arange(0.0, len(data1))
         fig = pl.figure()
         ax1 = fig.add_subplot(211)
-        ax1.set_title('cepstrum 1')
-        ax1.set_xlabel('quefrency in seconds')
+        ax1.set_title("cepstrum 1")
+        ax1.set_xlabel("quefrency in seconds")
         pl.plot(tvec, ceps1.real, tvec, ceps1.imag)
         ax2 = fig.add_subplot(212)
-        ax2.set_title('cepstrum 2')
-        ax2.set_xlabel('quefrency in seconds')
+        ax2.set_title("cepstrum 2")
+        ax2.set_xlabel("quefrency in seconds")
         pl.plot(tvec, ceps2.real, tvec, ceps2.imag)
         pl.show()
 
         fig = pl.figure()
         ax1 = fig.add_subplot(311)
-        ax1.set_title('additive_cepstrum')
-        ax1.set_xlabel('quefrency in seconds')
+        ax1.set_title("additive_cepstrum")
+        ax1.set_xlabel("quefrency in seconds")
         pl.plot(tvec, additive_cepstrum.real)
         ax2 = fig.add_subplot(312)
-        ax2.set_title('difference_cepstrum')
-        ax2.set_xlabel('quefrency in seconds')
+        ax2.set_title("difference_cepstrum")
+        ax2.set_xlabel("quefrency in seconds")
         pl.plot(tvec, difference_cepstrum)
         ax3 = fig.add_subplot(313)
-        ax3.set_title('residual_cepstrum')
-        ax3.set_xlabel('quefrency in seconds')
+        ax3.set_title("residual_cepstrum")
+        ax3.set_xlabel("quefrency in seconds")
         pl.plot(tvec, residual_cepstrum.real)
         pl.show()
-    return timestep * np.argmax(residual_cepstrum.real[0:len(residual_cepstrum) // 2])
+    return timestep * np.argmax(residual_cepstrum.real[0 : len(residual_cepstrum) // 2])
 
 
 # http://stackoverflow.com/questions/12323959/fast-cross-correlation-method-in-python
-def fastcorrelate(input1, input2, usefft=True, weighting='none', displayplots=False):
+def fastcorrelate(input1, input2, usefft=True, weighting="none", displayplots=False):
     """
 
     Parameters
@@ -374,13 +452,18 @@ def fastcorrelate(input1, input2, usefft=True, weighting='none', displayplots=Fa
     """
     if usefft:
         # Do an array flipped convolution, which is a correlation.
-        if weighting == 'none':
-            return signal.fftconvolve(input1, input2[::-1], mode='full')
+        if weighting == "none":
+            return signal.fftconvolve(input1, input2[::-1], mode="full")
         else:
-            return weightedfftconvolve(input1, input2[::-1], mode='full', weighting=weighting,
-                                       displayplots=displayplots)
+            return weightedfftconvolve(
+                input1,
+                input2[::-1],
+                mode="full",
+                weighting=weighting,
+                displayplots=displayplots,
+            )
     else:
-        return np.correlate(input1, input2, mode='full')
+        return np.correlate(input1, input2, mode="full")
 
 
 def _centered(arr, newsize):
@@ -420,10 +503,11 @@ def _check_valid_mode_shapes(shape1, shape2):
         if not d1 >= d2:
             raise ValueError(
                 "in1 should have at least as many items as in2 in "
-                "every dimension for 'valid' mode.")
+                "every dimension for 'valid' mode."
+            )
 
 
-def weightedfftconvolve(in1, in2, mode="full", weighting='none', displayplots=False):
+def weightedfftconvolve(in1, in2, mode="full", weighting="none", displayplots=False):
     """Convolve two N-dimensional arrays using FFT.
     Convolve `in1` and `in2` using the fast Fourier transform method, with
     the output size determined by the `mode` argument.
@@ -467,8 +551,9 @@ def weightedfftconvolve(in1, in2, mode="full", weighting='none', displayplots=Fa
 
     s1 = np.array(in1.shape)
     s2 = np.array(in2.shape)
-    complex_result = (np.issubdtype(in1.dtype, np.complex) or
-                      np.issubdtype(in2.dtype, np.complex))
+    complex_result = np.issubdtype(in1.dtype, np.complex) or np.issubdtype(
+        in2.dtype, np.complex
+    )
     size = s1 + s2 - 1
 
     if mode == "valid":
@@ -480,16 +565,26 @@ def weightedfftconvolve(in1, in2, mode="full", weighting='none', displayplots=Fa
     if not complex_result:
         fft1 = rfftn(in1, fsize)
         fft2 = rfftn(in2, fsize)
-        theorigmax = np.max(np.absolute(irfftn(gccproduct(fft1, fft2, 'none'), fsize)[fslice]))
-        ret = irfftn(gccproduct(fft1, fft2, weighting, displayplots=displayplots), fsize)[fslice].copy()
-        ret = irfftn(gccproduct(fft1, fft2, weighting, displayplots=displayplots), fsize)[fslice].copy()
+        theorigmax = np.max(
+            np.absolute(irfftn(gccproduct(fft1, fft2, "none"), fsize)[fslice])
+        )
+        ret = irfftn(
+            gccproduct(fft1, fft2, weighting, displayplots=displayplots), fsize
+        )[fslice].copy()
+        ret = irfftn(
+            gccproduct(fft1, fft2, weighting, displayplots=displayplots), fsize
+        )[fslice].copy()
         ret = ret.real
         ret *= theorigmax / np.max(np.absolute(ret))
     else:
         fft1 = fftpack.fftn(in1, fsize)
         fft2 = fftpack.fftn(in2, fsize)
-        theorigmax = np.max(np.absolute(fftpack.ifftn(gccproduct(fft1, fft2, 'none'))[fslice]))
-        ret = fftpack.ifftn(gccproduct(fft1, fft2, weighting, displayplots=displayplots))[fslice].copy()
+        theorigmax = np.max(
+            np.absolute(fftpack.ifftn(gccproduct(fft1, fft2, "none"))[fslice])
+        )
+        ret = fftpack.ifftn(
+            gccproduct(fft1, fft2, weighting, displayplots=displayplots)
+        )[fslice].copy()
         ret *= theorigmax / np.max(np.absolute(ret))
 
     # scale to preserve the maximum
@@ -518,26 +613,30 @@ def gccproduct(fft1, fft2, weighting, threshfrac=0.1, displayplots=False):
 
     """
     product = fft1 * fft2
-    if weighting == 'none':
+    if weighting == "none":
         return product
 
     # calculate the weighting function
-    if weighting == 'Liang':
+    if weighting == "Liang":
         denom = np.square(
-            np.sqrt(np.absolute(fft1 * np.conjugate(fft1))) + np.sqrt(np.absolute(fft2 * np.conjugate(fft2))))
-    elif weighting == 'Eckart':
-        denom = np.sqrt(np.absolute(fft1 * np.conjugate(fft1))) * np.sqrt(np.absolute(fft2 * np.conjugate(fft2)))
-    elif weighting == 'PHAT':
+            np.sqrt(np.absolute(fft1 * np.conjugate(fft1)))
+            + np.sqrt(np.absolute(fft2 * np.conjugate(fft2)))
+        )
+    elif weighting == "Eckart":
+        denom = np.sqrt(np.absolute(fft1 * np.conjugate(fft1))) * np.sqrt(
+            np.absolute(fft2 * np.conjugate(fft2))
+        )
+    elif weighting == "PHAT":
         denom = np.absolute(product)
     else:
-        print('illegal weighting function specified in gccproduct')
+        print("illegal weighting function specified in gccproduct")
         sys.exit()
 
     if displayplots:
         xvec = range(0, len(denom))
         fig = pl.figure()
         ax = fig.add_subplot(111)
-        ax.set_title('reciprocal weighting function')
+        ax.set_title("reciprocal weighting function")
         pl.plot(xvec, abs(denom))
         pl.show()
 
@@ -545,7 +644,9 @@ def gccproduct(fft1, fft2, weighting, threshfrac=0.1, displayplots=False):
     theorigmax = np.max(np.absolute(denom))
     thresh = theorigmax * threshfrac
     if thresh > 0.0:
-        with np.errstate(invalid='ignore', divide='ignore'):
-            return np.nan_to_num(np.where(np.absolute(denom) > thresh, product / denom, np.float64(0.0)))
+        with np.errstate(invalid="ignore", divide="ignore"):
+            return np.nan_to_num(
+                np.where(np.absolute(denom) > thresh, product / denom, np.float64(0.0))
+            )
     else:
         return 0.0 * product

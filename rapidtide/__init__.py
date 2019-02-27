@@ -1,8 +1,8 @@
 from .version import __version__  # noqa
 from ._gittag import __gittag__
 
-#try:
+# try:
 #    from .tidepoolTemplate_qt5 import *  # noqa
-#except:
+# except:
 #    from .tidepoolTemplate_qt4 import *  # noqa
-#from .OrthoImageItem import *  # noqa
+# from .OrthoImageItem import *  # noqa
