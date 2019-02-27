@@ -18,19 +18,20 @@
 # $Date: 2016/07/12 13:50:29 $
 # $Id: tide_funcs.py,v 1.4 2016/07/12 13:50:29 frederic Exp $
 #
-from __future__ import print_function, division
+from __future__ import division, print_function
 
-import numpy as np
-import scipy as sp
-from scipy import fftpack, signal
-from numpy.fft import rfftn, irfftn
-import pylab as pl
 import sys
 
-import rapidtide.util as tide_util
-import rapidtide.resample as tide_resample
+import numpy as np
+import pylab as pl
+import scipy as sp
+from numpy.fft import irfftn, rfftn
+from scipy import fftpack, signal
+
 import rapidtide.fit as tide_fit
 import rapidtide.miscmath as tide_math
+import rapidtide.resample as tide_resample
+import rapidtide.util as tide_util
 
 # ---------------------------------------- Global constants -------------------------------------------
 defaultbutterorder = 6
@@ -98,13 +99,13 @@ def disablenumba():
 def autocorrcheck(
     corrscale,
     thexcorr,
-    delta=0.1,
-    acampthresh=0.1,
-    aclagthresh=10.0,
-    displayplots=False,
-    prewindow=True,
-    detrendorder=1,
-    debug=False,
+    delta: float = 0.1,
+    acampthresh: float = 0.1,
+    aclagthresh: float = 10.0,
+    displayplots: bool = False,
+    prewindow: bool = True,
+    detrendorder: int = 1,
+    debug: bool = False,
 ):
     """
 
@@ -124,12 +125,12 @@ def autocorrcheck(
     -------
 
     """
-    lookahead = 2
+    lookahead: int = 2
     peaks = tide_fit.peakdetect(
         thexcorr, x_axis=corrscale, delta=delta, lookahead=lookahead
     )
-    maxpeaks = np.asarray(peaks[0], dtype="float64")
-    minpeaks = np.asarray(peaks[1], dtype="float64")
+    maxpeaks: np.array = np.asarray(peaks[0], dtype="float64")
+    minpeaks: np.array = np.asarray(peaks[1], dtype="float64")
     if len(peaks[0]) > 0:
         if debug:
             print(peaks)

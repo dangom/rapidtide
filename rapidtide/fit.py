@@ -18,22 +18,22 @@
 # $Date: 2016/07/12 13:50:29 $
 # $Id: tide_funcs.py,v 1.4 2016/07/12 13:50:29 frederic Exp $
 #
-from __future__ import print_function, division
+from __future__ import division, print_function
 
-import numpy as np
-import scipy as sp
-import scipy.special as sps
-import pylab as pl
 import warnings
 
+import numpy as np
+import pylab as pl
+import scipy as sp
+import scipy.special as sps
 from scipy.signal import hilbert
 
 import rapidtide.util as tide_util
 
 # ---------------------------------------- Global constants -------------------------------------------
-defaultbutterorder = 6
-MAXLINES = 10000000
-donotbeaggressive = True
+defaultbutterorder: int = 6
+MAXLINES: int = 10000000
+donotbeaggressive: bool = True
 
 # ----------------------------------------- Conditional imports ---------------------------------------
 try:
@@ -176,7 +176,7 @@ def risetimeresiduals(p, y, x):
     return y - risetime_eval_loop(x, p)
 
 
-def gausssk_eval(x, p):
+def gausssk_eval(x: float, p):
     """
 
     Parameters
@@ -188,7 +188,7 @@ def gausssk_eval(x, p):
     -------
 
     """
-    t = (x - p[1]) / p[2]
+    t: float = (x - p[1]) / p[2]
     return p[0] * sp.stats.norm.pdf(t) * sp.stats.norm.cdf(p[3] * t)
 
 

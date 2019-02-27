@@ -21,12 +21,12 @@
 #
 #
 #
-from __future__ import print_function, division
-
 import argparse
+from typing import Tuple
+
 import nibabel as nib
 
-from .parser_funcs import is_valid_file, invert_float, is_float
+from .parser_funcs import invert_float, is_float, is_valid_file
 
 
 def _get_parser():
@@ -926,38 +926,38 @@ def _get_parser():
 def rapidtide_workflow(
     in_file,
     prefix,
-    venousrefine=False,
-    nirs=False,
-    realtr="auto",
-    antialias=True,
-    invertregressor=False,
-    interptype="univariate",
+    venousrefine: bool = False,
+    nirs: bool = False,
+    realtr: str = "auto",
+    antialias: bool = True,
+    invertregressor: bool = False,
+    interptype: str = "univariate",
     offsettime=None,
     butterorder=None,
     arbvec=None,
     filtertype="arb",
-    numestreps=10000,
-    dosighistfit=True,
-    windowfunc="hamming",
-    gausssigma=0.0,
-    useglobalref=False,
-    meanscaleglobal=False,
+    numestreps: int = 10000,
+    dosighistfit: bool = True,
+    windowfunc: str = "hamming",
+    gausssigma: float = 0.0,
+    useglobalref: bool = False,
+    meanscaleglobal: bool = False,
     slicetimes=None,
     preprocskip=0,
-    nothresh=True,
-    oversampfactor=2,
+    nothresh: bool = True,
+    oversampfactor: int = 2,
     regressorfile=None,
-    inputfreq=1.0,
-    inputstarttime=0.0,
+    inputfreq: float = 1.0,
+    inputstarttime: float = 0.0,
     corrweighting="none",
-    dodetrend=True,
-    corrmaskthreshpct=1.0,
+    dodetrend: bool = True,
+    corrmaskthreshpct: int = 1.0,
     corrmaskname=None,
     fixeddelayvalue=None,
-    lag_extrema=(-30.0, 30.0),
-    widthlimit=100.0,
-    bipolar=False,
-    zerooutbadfit=True,
+    lag_extrema: Tuple[float, float] = (-30.0, 30.0),
+    widthlimit: float = 100.0,
+    bipolar: bool = False,
+    zerooutbadfit: bool = True,
     findmaxtype="gauss",
     despeckle_passes=0,
     despeckle_thresh=5,
