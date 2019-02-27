@@ -18,9 +18,6 @@
 # $Date: 2016/07/12 13:50:29 $
 # $Id: tide_funcs.py,v 1.4 2016/07/12 13:50:29 frederic Exp $
 #
-from __future__ import division, print_function
-
-import warnings
 
 import numpy as np
 import pylab as pl
@@ -1528,7 +1525,7 @@ def _datacheck_peakdetect(x_axis, y_axis):
 
     """
     if x_axis is None:
-        x_axis = range(len(y_axis))
+        x_axis = list(range(len(y_axis)))
 
     if np.shape(y_axis) != np.shape(x_axis):
         raise ValueError("Input vectors y_axis and x_axis must have same length")

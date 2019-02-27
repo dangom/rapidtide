@@ -18,9 +18,6 @@
 # $Date: 2016/07/12 13:50:29 $
 # $Id: tide_funcs.py,v 1.4 2016/07/12 13:50:29 frederic Exp $
 #
-from __future__ import division, print_function
-
-import sys
 
 import numpy as np
 import pylab as pl
@@ -634,7 +631,7 @@ def gccproduct(fft1, fft2, weighting, threshfrac=0.1, displayplots=False):
         sys.exit()
 
     if displayplots:
-        xvec = range(0, len(denom))
+        xvec = list(range(0, len(denom)))
         fig = pl.figure()
         ax = fig.add_subplot(111)
         ax.set_title("reciprocal weighting function")

@@ -18,7 +18,7 @@
 # $Date: 2016/07/12 13:50:29 $
 # $Id: tide_funcs.py,v 1.4 2016/07/12 13:50:29 frederic Exp $
 #
-from __future__ import print_function, division
+
 
 import numpy as np
 import sys
@@ -602,7 +602,7 @@ def readfmriprepconfounds(inputfilename):
     """
     confounddict = {}
     df = pd.read_csv(inputfilename + ".tsv", sep="\t", quotechar='"')
-    for thecolname, theseries in df.iteritems():
+    for thecolname, theseries in df.items():
         confounddict[thecolname] = theseries.values
     return confounddict
 
@@ -751,7 +751,7 @@ def readvecs(inputfilename, colspec=None):
         lines = thefile.readlines()
     if colspec is None:
         numvecs = len(lines[0].split())
-        collist = range(0, numvecs)
+        collist = list(range(0, numvecs))
     else:
         collist = colspectolist(colspec)
         if collist[-1] > len(lines[0].split()):

@@ -144,7 +144,7 @@ class dlfilter:
         self.thesuffix = thesuffix
         self.thedatadir = thedatadir
         self.modelpath = modelpath
-        print("modeldir from dlfilter:", self.modelpath)
+        print(("modeldir from dlfilter:", self.modelpath))
         self.excludethresh = excludethresh
         self.readlim = readlim
         self.readskip = readskip
@@ -221,7 +221,7 @@ class dlfilter:
 
     def evaluate(self):
         self.lossfilename = os.path.join(self.modelname, "loss.png")
-        print("lossfilename:", self.lossfilename)
+        print(("lossfilename:", self.lossfilename))
 
         YPred = self.model.predict(self.val_x)
 
@@ -230,7 +230,7 @@ class dlfilter:
 
         error2 = self.val_x - self.val_y
         self.raw_error = np.mean(np.square(error2))
-        print("Prediction Error: ", self.pred_error, "Raw Error: ", self.raw_error)
+        print(("Prediction Error: ", self.pred_error, "Raw Error: ", self.raw_error))
 
         f = open(os.path.join(self.modelname, "loss.txt"), "w")
         f.write(
@@ -246,7 +246,7 @@ class dlfilter:
         self.loss = self.history.history["loss"]
         self.val_loss = self.history.history["val_loss"]
 
-        epochs = range(len(self.loss))
+        epochs = list(range(len(self.loss)))
 
         self.updatemetadata()
 
@@ -298,7 +298,7 @@ class dlfilter:
 
     def loadmodel(self, modelname, usehdf=True):
         # read in the data
-        print("loading", modelname)
+        print(("loading", modelname))
 
         if usehdf:
             # load in the model with weights from hdf
@@ -525,7 +525,7 @@ class denseautoencoder(dlfilter):
         sizefac = 2
         for i in range(1, self.num_layers - 1):
             sizefac = int(sizefac * 2)
-        print("input layer - sizefac:", sizefac)
+        print(("input layer - sizefac:", sizefac))
 
         self.model.add(
             Dense(sizefac * self.encoding_dim, input_shape=(None, self.inputsize))
@@ -537,7 +537,7 @@ class denseautoencoder(dlfilter):
         # make the intermediate encoding layers
         for i in range(1, self.num_layers - 1):
             sizefac = int(sizefac // 2)
-            print("encoder layer", i + 1, ", sizefac:", sizefac)
+            print(("encoder layer", i + 1, ", sizefac:", sizefac))
             self.model.add(Dense(sizefac * self.encoding_dim))
             self.model.add(BatchNormalization())
             self.model.add(Dropout(rate=self.dropout_rate))
@@ -545,7 +545,7 @@ class denseautoencoder(dlfilter):
 
         # make the encoding layer
         sizefac = int(sizefac // 2)
-        print("encoding layer - sizefac:", sizefac)
+        print(("encoding layer - sizefac:", sizefac))
         self.model.add(Dense(self.encoding_dim))
         self.model.add(BatchNormalization())
         self.model.add(Dropout(rate=self.dropout_rate))
@@ -554,7 +554,7 @@ class denseautoencoder(dlfilter):
         # make the intermediate decoding layers
         for i in range(1, self.num_layers):
             sizefac = int(sizefac * 2)
-            print("decoding layer", i, ", sizefac:", sizefac)
+            print(("decoding layer", i, ", sizefac:", sizefac))
             self.model.add(Dense(sizefac * self.encoding_dim))
             self.model.add(BatchNormalization())
             self.model.add(Dropout(rate=self.dropout_rate))
@@ -618,7 +618,7 @@ class convautoencoder(dlfilter):
 
         # make the input layer
         layersize = self.window_size
-        print("input layer size:", layersize)
+        print(("input layer size:", layersize))
 
         self.model.add(
             Convolution1D(
@@ -636,7 +636,7 @@ class convautoencoder(dlfilter):
 
         # make the intermediate encoding layers
         for i in range(1, self.num_layers - 1):
-            print("input layer size:", layersize)
+            print(("input layer size:", layersize))
             self.model.add(
                 Convolution1D(
                     filters=self.num_filters,
@@ -651,7 +651,7 @@ class convautoencoder(dlfilter):
             layersize = int(layersize // 2)
 
         # make the encoding layer
-        print("input layer size:", layersize)
+        print(("input layer size:", layersize))
         self.model.add(
             Convolution1D(
                 filters=self.num_filters, kernel_size=self.kernel_size, padding="same"
@@ -665,7 +665,7 @@ class convautoencoder(dlfilter):
         for i in range(1, self.num_layers):
             self.model.add(UpSampling1D(2))
             layersize = layersize * 2
-            print("input layer size:", layersize)
+            print(("input layer size:", layersize))
             self.model.add(
                 Convolution1D(
                     filters=self.num_filters,
@@ -678,7 +678,7 @@ class convautoencoder(dlfilter):
             self.model.add(Activation(self.activation))
 
         # make the output layer
-        print("input layer size:", layersize)
+        print(("input layer size:", layersize))
         self.model.add(
             Convolution1D(
                 filters=self.inputsize, kernel_size=self.kernel_size, padding="same"
@@ -988,7 +988,7 @@ def tobadpts(name):
 
 def targettoinput(name, targetfrag="xyz", inputfrag="abc", debug=False):
     if debug:
-        print("replacing", targetfrag, "with", inputfrag)
+        print(("replacing", targetfrag, "with", inputfrag))
     return name.replace(targetfrag, inputfrag)
 
 
@@ -998,7 +998,7 @@ def getmatchedfiles(
     # list all of the target files
     fromfile = sorted(glob.glob(searchstring))
     if debug:
-        print("searchstring:", searchstring, "->", fromfile)
+        print(("searchstring:", searchstring, "->", fromfile))
 
     # make sure all files exist
     matchedfilelist = []
@@ -1023,15 +1023,15 @@ def getmatchedfiles(
                 ):
                     matchedfilelist.append(targetname)
                     if debug:
-                        print(matchedfilelist[-1])
+                        print((matchedfilelist[-1]))
             else:
                 matchedfilelist.append(targetname)
                 if debug:
-                    print(matchedfilelist[-1])
+                    print((matchedfilelist[-1]))
     if usebadpts:
-        print(len(matchedfilelist), "runs pass all 4 files present check")
+        print((len(matchedfilelist), "runs pass all 4 files present check"))
     else:
-        print(len(matchedfilelist), "runs pass both files present check")
+        print((len(matchedfilelist), "runs pass both files present check"))
 
     # find out how long the files are
     tempy = np.loadtxt(matchedfilelist[0])
@@ -1041,7 +1041,7 @@ def getmatchedfiles(
         )
     )
     tclen = np.min([tempx.shape[0], tempy.shape[0]])
-    print("tclen set to", tclen)
+    print(("tclen set to", tclen))
     return matchedfilelist, tclen
 
 
@@ -1057,7 +1057,7 @@ def readindata(
     readskip=None,
     debug=False,
 ):
-    print(
+    print((
         "readindata called with usebadpts, startskip, endskip, readlim, readskip, targetfrag, inputfrag =",
         usebadpts,
         startskip,
@@ -1066,13 +1066,13 @@ def readindata(
         readskip,
         targetfrag,
         inputfrag,
-    )
+    ))
     # allocate target arrays
     print("allocating arrays")
     s = len(matchedfilelist[readskip:])
     if readlim is not None:
         if s > readlim:
-            print("trimming read list to", readlim, "from", s)
+            print(("trimming read list to", readlim, "from", s))
             s = readlim
     x1 = np.zeros((tclen, s))
     y1 = np.zeros((tclen, s))
@@ -1088,7 +1088,7 @@ def readindata(
     strangemagfiles = []
     for i in range(readskip, readskip + s):
         nanfound = False
-        print("processing ", matchedfilelist[i])
+        print(("processing ", matchedfilelist[i]))
         tempy = np.loadtxt(matchedfilelist[i])
         tempx = np.loadtxt(
             targettoinput(
@@ -1099,17 +1099,17 @@ def readindata(
             )
         )
         if np.any(np.isnan(tempy)):
-            print("NaN found in file", matchedfilelist[i], "- discarding")
+            print(("NaN found in file", matchedfilelist[i], "- discarding"))
             nanfound = True
             nanfiles.append(matchedfilelist[i])
         if np.any(np.isnan(tempx)):
-            print(
+            print((
                 "NaN found in file",
                 targettoinput(
                     matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
                 ),
                 "- discarding",
-            )
+            ))
             nanfound = True
             nanfiles.append(
                 targettoinput(
@@ -1118,13 +1118,13 @@ def readindata(
             )
         strangefound = False
         if not (0.5 < np.std(tempx) < 20.0):
-            print(
+            print((
                 "file",
                 targettoinput(
                     matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
                 ),
                 "has an extreme standard deviation - discarding",
-            )
+            ))
             strangefound = True
             strangemagfiles.append(
                 targettoinput(
@@ -1132,24 +1132,24 @@ def readindata(
                 )
             )
         if not (0.5 < np.std(tempy) < 20.0):
-            print(
+            print((
                 "file",
                 matchedfilelist[i],
                 "has an extreme standard deviation - discarding",
-            )
+            ))
             strangefound = True
             strangemagfiles.append(matchedfilelist[i])
         shortfound = False
         ntempx = tempx.shape[0]
         ntempy = tempy.shape[0]
         if ntempx < tclen:
-            print(
+            print((
                 "file",
                 targettoinput(
                     matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
                 ),
                 "is short - discarding",
-            )
+            ))
             shortfound = True
             shortfiles.append(
                 targettoinput(
@@ -1157,7 +1157,7 @@ def readindata(
                 )
             )
         if ntempy < tclen:
-            print("file", matchedfilelist[i], "is short - discarding")
+            print(("file", matchedfilelist[i], "is short - discarding"))
             shortfound = True
             shortfiles.append(matchedfilelist[i])
         if (
@@ -1188,19 +1188,19 @@ def readindata(
                     1.0 - tempbad2[:tclen]
                 )
             count += 1
-    print(count, "runs pass file length check")
+    print((count, "runs pass file length check"))
     if len(nanfiles) > 0:
         print("files with NaNs:")
         for thefile in nanfiles:
-            print("\t", thefile)
+            print(("\t", thefile))
     if len(shortfiles) > 0:
         print("short files:")
         for thefile in shortfiles:
-            print("\t", thefile)
+            print(("\t", thefile))
     if len(strangemagfiles) > 0:
         print("files with extreme standard deviations:")
         for thefile in strangemagfiles:
-            print("\t", thefile)
+            print(("\t", thefile))
 
     if usebadpts:
         return (
@@ -1302,14 +1302,14 @@ def prep(
             readskip=readskip,
             debug=debug,
         )
-    print("xshape, yshape:", x.shape, y.shape)
+    print(("xshape, yshape:", x.shape, y.shape))
 
     # normalize input and output data
     print("normalizing data")
-    print("count:", x.shape[1])
+    print(("count:", x.shape[1]))
     if debug:
         for thesubj in range(x.shape[1]):
-            print(
+            print((
                 "prenorm sub",
                 thesubj,
                 "min, max, mean, std, MAD x, y:",
@@ -1324,7 +1324,7 @@ def prep(
                 np.mean(y[:, thesubj]),
                 np.std(x[:, thesubj]),
                 mad(y[:, thesubj]),
-            )
+            ))
 
     y -= np.mean(y, axis=0)
     themad = mad(y, axis=0)
@@ -1340,7 +1340,7 @@ def prep(
 
     if debug:
         for thesubj in range(x.shape[1]):
-            print(
+            print((
                 "postnorm sub",
                 thesubj,
                 "min, max, mean, std, MAD x, y:",
@@ -1355,7 +1355,7 @@ def prep(
                 np.mean(y[:, thesubj]),
                 np.std(x[:, thesubj]),
                 mad(y[:, thesubj]),
-            )
+            ))
 
     # now decide what to keep and what to exclude
     thefabs = np.fabs(x)
@@ -1363,7 +1363,7 @@ def prep(
         N_pts = x.shape[0]
         N_subjs = x.shape[1]
         windowspersubject = np.int64((N_pts - window_size - 1) // step)
-        print(
+        print((
             N_subjs,
             "subjects with",
             N_pts,
@@ -1371,7 +1371,7 @@ def prep(
             windowspersubject,
             "windows per subject with step",
             step,
-        )
+        ))
         usewindow = np.zeros(N_subjs * windowspersubject, dtype=np.int64)
         subjectstarts = np.zeros(N_subjs, dtype=np.int64)
         # check each window
@@ -1381,7 +1381,7 @@ def prep(
         for subj in range(N_subjs):
             subjectstarts[subj] = numgoodwindows
             subjectnames.append(names[subj])
-            print(names[subj], "starts at", numgoodwindows)
+            print((names[subj], "starts at", numgoodwindows))
             for windownumber in range(windowspersubject):
                 if (
                     np.max(
@@ -1394,7 +1394,7 @@ def prep(
                 ):
                     usewindow[subj * windowspersubject + windownumber] = 1
                     numgoodwindows += 1
-        print(
+        print((
             "found",
             numgoodwindows,
             "out of a potential",
@@ -1402,17 +1402,17 @@ def prep(
             "(",
             100.0 * numgoodwindows / (N_subjs * windowspersubject),
             "%)",
-        )
+        ))
 
         for subj in range(N_subjs):
-            print(names[subj], "starts at", subjectstarts[subj])
+            print((names[subj], "starts at", subjectstarts[subj]))
 
         print("copying data into windows")
         Xb = np.zeros((numgoodwindows, window_size, 1))
         Yb = np.zeros((numgoodwindows, window_size, 1))
         if usebadpts:
             Xb_withbad = np.zeros((numgoodwindows, window_size, 1))
-        print("dimensions of Xb:", Xb.shape)
+        print(("dimensions of Xb:", Xb.shape))
         thiswindow = 0
         for subj in range(N_subjs):
             for windownumber in range(windowspersubject):
@@ -1440,7 +1440,7 @@ def prep(
         cleancount = len(cleansubjs)
         if countlim is not None:
             if cleancount > countlim:
-                print("reducing count to", countlim, "from", cleancount)
+                print(("reducing count to", countlim, "from", cleancount))
                 cleansubjs = cleansubjs[:countlim]
 
         x = x[:, cleansubjs]
@@ -1451,7 +1451,7 @@ def prep(
             bad = bad[:, cleansubjs]
         subjectnames = cleannames
 
-        print("after filtering, shape of x is", x.shape)
+        print(("after filtering, shape of x is", x.shape))
 
         N_pts = y.shape[0]
         N_subjs = y.shape[1]
@@ -1467,7 +1467,7 @@ def prep(
             BAD[0, :, :] = bad
 
         windowspersubject = int((N_pts - window_size - 1) // step)
-        print(
+        print((
             "found",
             windowspersubject * cleancount,
             "out of a potential",
@@ -1475,13 +1475,13 @@ def prep(
             "(",
             100.0 * cleancount / totalcount,
             "%)",
-        )
-        print(windowspersubject, cleancount, totalcount)
+        ))
+        print((windowspersubject, cleancount, totalcount))
 
         Xb = np.zeros((N_subjs * windowspersubject, window_size, 1))
-        print("dimensions of Xb:", Xb.shape)
+        print(("dimensions of Xb:", Xb.shape))
         for j in range(N_subjs):
-            print(
+            print((
                 "sub",
                 j,
                 "(",
@@ -1492,14 +1492,14 @@ def prep(
                 np.max(X[0, :, j]),
                 np.min(Y[0, :, j]),
                 np.max(Y[0, :, j]),
-            )
+            ))
             for i in range(windowspersubject):
                 Xb[j * windowspersubject + i, :, 0] = X[
                     0, step * i : (step * i + window_size), j
                 ]
 
         Yb = np.zeros((N_subjs * windowspersubject, window_size, 1))
-        print("dimensions of Yb:", Yb.shape)
+        print(("dimensions of Yb:", Yb.shape))
         for j in range(N_subjs):
             for i in range(windowspersubject):
                 Yb[j * windowspersubject + i, :, 0] = Y[
@@ -1508,9 +1508,9 @@ def prep(
 
         if usebadpts:
             Xb_withbad = np.zeros((N_subjs * windowspersubject, window_size, 2))
-            print("dimensions of Xb_withbad:", Xb_withbad.shape)
+            print(("dimensions of Xb_withbad:", Xb_withbad.shape))
             for j in range(N_subjs):
-                print("packing data for subject", j)
+                print(("packing data for subject", j))
                 for i in range(windowspersubject):
                     Xb_withbad[j * windowspersubject + i, :, 0] = X[
                         0, step * i : (step * i + window_size), j
@@ -1520,24 +1520,24 @@ def prep(
                     ]
             Xb = Xb_withbad
 
-        subjectstarts = range(N_subjs) * windowspersubject
+        subjectstarts = list(range(N_subjs)) * windowspersubject
         for subj in range(N_subjs):
-            print(names[subj], "starts at", subjectstarts[subj])
+            print((names[subj], "starts at", subjectstarts[subj]))
 
-    print("Xb.shape:", Xb.shape)
-    print("Yb.shape:", Yb.shape)
+    print(("Xb.shape:", Xb.shape))
+    print(("Yb.shape:", Yb.shape))
 
     if dofft:
         Xb_fourier = np.zeros((N_subjs * windowspersubject, window_size, 2))
-        print("dimensions of Xb_fourier:", Xb_fourier.shape)
+        print(("dimensions of Xb_fourier:", Xb_fourier.shape))
         Xscale_fourier = np.zeros((N_subjs, windowspersubject))
-        print("dimensions of Xscale_fourier:", Xscale_fourier.shape)
+        print(("dimensions of Xscale_fourier:", Xscale_fourier.shape))
         Yb_fourier = np.zeros((N_subjs * windowspersubject, window_size, 2))
-        print("dimensions of Yb_fourier:", Yb_fourier.shape)
+        print(("dimensions of Yb_fourier:", Yb_fourier.shape))
         Yscale_fourier = np.zeros((N_subjs, windowspersubject))
-        print("dimensions of Yscale_fourier:", Yscale_fourier.shape)
+        print(("dimensions of Yscale_fourier:", Yscale_fourier.shape))
         for j in range(N_subjs):
-            print("transforming subject", j)
+            print(("transforming subject", j))
             for i in range((N_pts - window_size - 1)):
                 Xb_fourier[j * windowspersubject + i, :, :], Xscale_fourier[
                     j, i
@@ -1547,10 +1547,10 @@ def prep(
                 ] = filtscale(Y[0, step * i : (step * i + window_size), j])
 
     limit = np.int64(0.8 * Xb.shape[0])
-    print("limit:", limit, "out of", len(subjectstarts))
+    print(("limit:", limit, "out of", len(subjectstarts)))
     # find nearest subject start
     firstvalsubject = np.abs(subjectstarts - limit).argmin()
-    print("firstvalsubject:", firstvalsubject)
+    print(("firstvalsubject:", firstvalsubject))
     perm_train = np.random.permutation(
         np.int64(np.arange(subjectstarts[firstvalsubject]))
     )
@@ -1560,12 +1560,12 @@ def prep(
 
     print("training subjects:")
     for i in range(0, firstvalsubject):
-        print("\t", i, subjectnames[i])
+        print(("\t", i, subjectnames[i]))
     print("validation subjects:")
     for i in range(firstvalsubject, len(subjectstarts)):
-        print("\t", i, subjectnames[i])
+        print(("\t", i, subjectnames[i]))
 
-    perm = range(Xb.shape[0])
+    perm = list(range(Xb.shape[0]))
 
     batchsize = windowspersubject
 
@@ -1575,9 +1575,9 @@ def prep(
 
         val_x = Xb_fourier[perm[limit:], :, :]
         val_y = Yb_fourier[perm[limit:], :, :]
-        print(
+        print((
             "train, val dims:", train_x.shape, train_y.shape, val_x.shape, val_y.shape
-        )
+        ))
         return (
             train_x,
             train_y,
@@ -1596,9 +1596,9 @@ def prep(
         val_x = Xb[perm_val, :, :]
         val_y = Yb[perm_val, :, :]
 
-        print(
+        print((
             "train, val dims:", train_x.shape, train_y.shape, val_x.shape, val_y.shape
-        )
+        ))
         return (
             train_x,
             train_y,

@@ -21,7 +21,7 @@
 #
 #
 #
-from __future__ import print_function, division
+
 
 import argparse
 import nibabel as nib

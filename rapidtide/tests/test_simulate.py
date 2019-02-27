@@ -19,7 +19,7 @@
 #       $Date: 2016/06/14 12:04:51 $
 #       $Id: simdata,v 1.18 2016/06/14 12:04:51 frederic Exp $
 #
-from __future__ import print_function
+
 
 import numpy as np
 import pylab as plt

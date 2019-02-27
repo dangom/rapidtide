@@ -19,7 +19,7 @@
 #       $Date: 2016/07/11 14:50:43 $
 #       $Id: showxcorr,v 1.41 2016/07/11 14:50:43 frederic Exp $
 #
-from __future__ import print_function, division
+
 
 import numpy as np
 import scipy as sp

@@ -18,7 +18,7 @@
 # $Date: 2016/07/12 13:50:29 $
 # $Id: tide_funcs.py,v 1.4 2016/07/12 13:50:29 frederic Exp $
 #
-from __future__ import print_function, division
+
 
 import time
 
@@ -225,7 +225,7 @@ def congrid(xaxis, loc, val, width, kernel="kaiser", cyclic=True, debug=False):
             )
             yvals = congridyvals[offsetkey]
         startpt = int(center - widthinpts // 2)
-        indices = range(startpt, startpt + widthinpts)
+        indices = list(range(startpt, startpt + widthinpts))
         indices = np.remainder(indices, len(xaxis))
         if debug:
             print("center, offset, indices, yvals", center, offset, indices, yvals)
@@ -234,7 +234,7 @@ def congrid(xaxis, loc, val, width, kernel="kaiser", cyclic=True, debug=False):
         offsetinpts = center + offset
         startpt = int(np.ceil(offsetinpts - width / 2.0))
         endpt = int(np.floor(offsetinpts + width / 2.0))
-        indices = np.remainder(range(startpt, endpt + 1), len(xaxis))
+        indices = np.remainder(list(range(startpt, endpt + 1)), len(xaxis))
         try:
             yvals = congridyvals[offsetkey]
         except KeyError:
@@ -735,7 +735,7 @@ def timeshift(inputtc, shifttrs, padtrs, doplot=False, debug=False):
     shifted_weights = fftpack.ifft(modvec * w_fftdata).real
 
     if doplot:
-        xvec = range(0, thepaddedlen)  # make a ramp vector (with pad)
+        xvec = list(range(0, thepaddedlen))  # make a ramp vector (with pad)
         print("shifttrs:", shifttrs)
         print("offset:", padtrs)
         print("thelen:", thelen)
