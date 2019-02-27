@@ -23,7 +23,6 @@
 #
 
 
-
 import numpy as np
 import rapidtide.multiproc as tide_multiproc
 import rapidtide.util as tide_util

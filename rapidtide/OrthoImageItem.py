@@ -26,7 +26,6 @@ A widget for orthographically displaying 3 and 4 dimensional data
 """
 
 
-
 qtbinding = "pyqt4"
 from pyqtgraph.Qt import QtGui, QtCore
 

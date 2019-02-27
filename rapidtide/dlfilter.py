@@ -1057,16 +1057,18 @@ def readindata(
     readskip=None,
     debug=False,
 ):
-    print((
-        "readindata called with usebadpts, startskip, endskip, readlim, readskip, targetfrag, inputfrag =",
-        usebadpts,
-        startskip,
-        endskip,
-        readlim,
-        readskip,
-        targetfrag,
-        inputfrag,
-    ))
+    print(
+        (
+            "readindata called with usebadpts, startskip, endskip, readlim, readskip, targetfrag, inputfrag =",
+            usebadpts,
+            startskip,
+            endskip,
+            readlim,
+            readskip,
+            targetfrag,
+            inputfrag,
+        )
+    )
     # allocate target arrays
     print("allocating arrays")
     s = len(matchedfilelist[readskip:])
@@ -1103,13 +1105,15 @@ def readindata(
             nanfound = True
             nanfiles.append(matchedfilelist[i])
         if np.any(np.isnan(tempx)):
-            print((
-                "NaN found in file",
-                targettoinput(
-                    matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
-                ),
-                "- discarding",
-            ))
+            print(
+                (
+                    "NaN found in file",
+                    targettoinput(
+                        matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
+                    ),
+                    "- discarding",
+                )
+            )
             nanfound = True
             nanfiles.append(
                 targettoinput(
@@ -1118,13 +1122,15 @@ def readindata(
             )
         strangefound = False
         if not (0.5 < np.std(tempx) < 20.0):
-            print((
-                "file",
-                targettoinput(
-                    matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
-                ),
-                "has an extreme standard deviation - discarding",
-            ))
+            print(
+                (
+                    "file",
+                    targettoinput(
+                        matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
+                    ),
+                    "has an extreme standard deviation - discarding",
+                )
+            )
             strangefound = True
             strangemagfiles.append(
                 targettoinput(
@@ -1132,24 +1138,28 @@ def readindata(
                 )
             )
         if not (0.5 < np.std(tempy) < 20.0):
-            print((
-                "file",
-                matchedfilelist[i],
-                "has an extreme standard deviation - discarding",
-            ))
+            print(
+                (
+                    "file",
+                    matchedfilelist[i],
+                    "has an extreme standard deviation - discarding",
+                )
+            )
             strangefound = True
             strangemagfiles.append(matchedfilelist[i])
         shortfound = False
         ntempx = tempx.shape[0]
         ntempy = tempy.shape[0]
         if ntempx < tclen:
-            print((
-                "file",
-                targettoinput(
-                    matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
-                ),
-                "is short - discarding",
-            ))
+            print(
+                (
+                    "file",
+                    targettoinput(
+                        matchedfilelist[i], targetfrag=targetfrag, inputfrag=inputfrag
+                    ),
+                    "is short - discarding",
+                )
+            )
             shortfound = True
             shortfiles.append(
                 targettoinput(
@@ -1309,22 +1319,24 @@ def prep(
     print(("count:", x.shape[1]))
     if debug:
         for thesubj in range(x.shape[1]):
-            print((
-                "prenorm sub",
-                thesubj,
-                "min, max, mean, std, MAD x, y:",
-                thesubj,
-                np.min(x[:, thesubj]),
-                np.max(x[:, thesubj]),
-                np.mean(x[:, thesubj]),
-                np.std(x[:, thesubj]),
-                mad(x[:, thesubj]),
-                np.min(y[:, thesubj]),
-                np.max(y[:, thesubj]),
-                np.mean(y[:, thesubj]),
-                np.std(x[:, thesubj]),
-                mad(y[:, thesubj]),
-            ))
+            print(
+                (
+                    "prenorm sub",
+                    thesubj,
+                    "min, max, mean, std, MAD x, y:",
+                    thesubj,
+                    np.min(x[:, thesubj]),
+                    np.max(x[:, thesubj]),
+                    np.mean(x[:, thesubj]),
+                    np.std(x[:, thesubj]),
+                    mad(x[:, thesubj]),
+                    np.min(y[:, thesubj]),
+                    np.max(y[:, thesubj]),
+                    np.mean(y[:, thesubj]),
+                    np.std(x[:, thesubj]),
+                    mad(y[:, thesubj]),
+                )
+            )
 
     y -= np.mean(y, axis=0)
     themad = mad(y, axis=0)
@@ -1340,22 +1352,24 @@ def prep(
 
     if debug:
         for thesubj in range(x.shape[1]):
-            print((
-                "postnorm sub",
-                thesubj,
-                "min, max, mean, std, MAD x, y:",
-                thesubj,
-                np.min(x[:, thesubj]),
-                np.max(x[:, thesubj]),
-                np.mean(x[:, thesubj]),
-                np.std(x[:, thesubj]),
-                mad(x[:, thesubj]),
-                np.min(y[:, thesubj]),
-                np.max(y[:, thesubj]),
-                np.mean(y[:, thesubj]),
-                np.std(x[:, thesubj]),
-                mad(y[:, thesubj]),
-            ))
+            print(
+                (
+                    "postnorm sub",
+                    thesubj,
+                    "min, max, mean, std, MAD x, y:",
+                    thesubj,
+                    np.min(x[:, thesubj]),
+                    np.max(x[:, thesubj]),
+                    np.mean(x[:, thesubj]),
+                    np.std(x[:, thesubj]),
+                    mad(x[:, thesubj]),
+                    np.min(y[:, thesubj]),
+                    np.max(y[:, thesubj]),
+                    np.mean(y[:, thesubj]),
+                    np.std(x[:, thesubj]),
+                    mad(y[:, thesubj]),
+                )
+            )
 
     # now decide what to keep and what to exclude
     thefabs = np.fabs(x)
@@ -1363,15 +1377,17 @@ def prep(
         N_pts = x.shape[0]
         N_subjs = x.shape[1]
         windowspersubject = np.int64((N_pts - window_size - 1) // step)
-        print((
-            N_subjs,
-            "subjects with",
-            N_pts,
-            "points will be evaluated with",
-            windowspersubject,
-            "windows per subject with step",
-            step,
-        ))
+        print(
+            (
+                N_subjs,
+                "subjects with",
+                N_pts,
+                "points will be evaluated with",
+                windowspersubject,
+                "windows per subject with step",
+                step,
+            )
+        )
         usewindow = np.zeros(N_subjs * windowspersubject, dtype=np.int64)
         subjectstarts = np.zeros(N_subjs, dtype=np.int64)
         # check each window
@@ -1394,15 +1410,17 @@ def prep(
                 ):
                     usewindow[subj * windowspersubject + windownumber] = 1
                     numgoodwindows += 1
-        print((
-            "found",
-            numgoodwindows,
-            "out of a potential",
-            N_subjs * windowspersubject,
-            "(",
-            100.0 * numgoodwindows / (N_subjs * windowspersubject),
-            "%)",
-        ))
+        print(
+            (
+                "found",
+                numgoodwindows,
+                "out of a potential",
+                N_subjs * windowspersubject,
+                "(",
+                100.0 * numgoodwindows / (N_subjs * windowspersubject),
+                "%)",
+            )
+        )
 
         for subj in range(N_subjs):
             print((names[subj], "starts at", subjectstarts[subj]))
@@ -1467,32 +1485,36 @@ def prep(
             BAD[0, :, :] = bad
 
         windowspersubject = int((N_pts - window_size - 1) // step)
-        print((
-            "found",
-            windowspersubject * cleancount,
-            "out of a potential",
-            windowspersubject * totalcount,
-            "(",
-            100.0 * cleancount / totalcount,
-            "%)",
-        ))
+        print(
+            (
+                "found",
+                windowspersubject * cleancount,
+                "out of a potential",
+                windowspersubject * totalcount,
+                "(",
+                100.0 * cleancount / totalcount,
+                "%)",
+            )
+        )
         print((windowspersubject, cleancount, totalcount))
 
         Xb = np.zeros((N_subjs * windowspersubject, window_size, 1))
         print(("dimensions of Xb:", Xb.shape))
         for j in range(N_subjs):
-            print((
-                "sub",
-                j,
-                "(",
-                cleannames[j],
-                "), min, max X, Y:",
-                j,
-                np.min(X[0, :, j]),
-                np.max(X[0, :, j]),
-                np.min(Y[0, :, j]),
-                np.max(Y[0, :, j]),
-            ))
+            print(
+                (
+                    "sub",
+                    j,
+                    "(",
+                    cleannames[j],
+                    "), min, max X, Y:",
+                    j,
+                    np.min(X[0, :, j]),
+                    np.max(X[0, :, j]),
+                    np.min(Y[0, :, j]),
+                    np.max(Y[0, :, j]),
+                )
+            )
             for i in range(windowspersubject):
                 Xb[j * windowspersubject + i, :, 0] = X[
                     0, step * i : (step * i + window_size), j
@@ -1575,9 +1597,9 @@ def prep(
 
         val_x = Xb_fourier[perm[limit:], :, :]
         val_y = Yb_fourier[perm[limit:], :, :]
-        print((
-            "train, val dims:", train_x.shape, train_y.shape, val_x.shape, val_y.shape
-        ))
+        print(
+            ("train, val dims:", train_x.shape, train_y.shape, val_x.shape, val_y.shape)
+        )
         return (
             train_x,
             train_y,
@@ -1596,9 +1618,9 @@ def prep(
         val_x = Xb[perm_val, :, :]
         val_y = Yb[perm_val, :, :]
 
-        print((
-            "train, val dims:", train_x.shape, train_y.shape, val_x.shape, val_y.shape
-        ))
+        print(
+            ("train, val dims:", train_x.shape, train_y.shape, val_x.shape, val_y.shape)
+        )
         return (
             train_x,
             train_y,

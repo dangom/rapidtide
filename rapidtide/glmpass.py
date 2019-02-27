@@ -23,7 +23,6 @@
 #
 
 
-
 import numpy as np
 
 import rapidtide.fit as tide_fit

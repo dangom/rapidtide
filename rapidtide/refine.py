@@ -23,7 +23,6 @@
 #
 
 
-
 import gc
 
 import rapidtide.miscmath as tide_math

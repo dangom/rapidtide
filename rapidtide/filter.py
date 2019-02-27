@@ -24,7 +24,6 @@ package.
 """
 
 
-
 import numpy as np
 from scipy import fftpack, ndimage, signal
 import pylab as pl
